@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#f5f9ff" />
-  <title>Open Shift — 오픈 근무 매니저</title>
-  <meta name="description" content="PC, iPad, iPhone에서 사용하는 반응형 오픈 근무 체크리스트" />
+  <title>Open Shift — 근무 체크 매니저</title>
+  <meta name="description" content="PC, iPad, iPhone에서 사용하는 반응형 근무 체크리스트" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
@@ -15,157 +15,141 @@
   <div class="app">
     <aside class="sidebar" id="sidebar">
       <div class="brand">
-        <div class="brand-logo" aria-hidden="true">
-          <span class="sun">☀</span>
-          <span class="cup">☕</span>
-        </div>
-        <div>
-          <h1>Open Shift</h1>
-          <p>오픈 근무 매니저</p>
-        </div>
+        <div class="brand-logo" aria-hidden="true"><span class="sun">☀</span><span class="cup">☕</span></div>
+        <div><h1>Open Shift</h1><p>근무 체크 매니저</p></div>
       </div>
-
       <nav class="side-nav">
         <button class="nav-item active" data-scroll="home"><span>⌂</span><b>홈</b></button>
+        <button class="nav-item" data-scroll="noticeTop"><span>☀</span><b>오늘 확인</b></button>
         <button class="nav-item" data-scroll="checklist"><span>☑</span><b>업무 체크</b></button>
-        <button class="nav-item" data-scroll="schedule"><span>◷</span><b>일정</b></button>
-        <button class="nav-item" data-scroll="memo"><span>✎</span><b>메모 / 공지</b></button>
+        <button class="nav-item" data-scroll="memo"><span>✎</span><b>메모</b></button>
+        <button class="nav-item" data-scroll="summaryCard"><span>▣</span><b>근무 요약</b></button>
         <button class="nav-item" id="openSettings"><span>⚙</span><b>설정</b></button>
       </nav>
-
-      <div class="side-quote">
-        <div class="quote-icon">☀</div>
-        <strong>좋은 오픈이<br>좋은 하루를 만듭니다.</strong>
-      </div>
+      <div class="side-quote"><div class="quote-icon">☀</div><strong>좋은 근무가<br>좋은 하루를 만듭니다.</strong></div>
     </aside>
 
     <div class="main-shell">
       <header class="mobile-topbar">
         <button class="menu-btn" id="menuBtn" aria-label="메뉴 열기">☰</button>
-        <div class="mobile-brand">
-          <span>☀☕</span>
-          <strong>Open Shift</strong>
-        </div>
+        <div class="mobile-brand"><span>☀☕</span><strong>Open Shift</strong></div>
         <button class="avatar-btn" id="mobileSettingsBtn" aria-label="설정 열기">⚙</button>
       </header>
 
       <main class="content" id="home">
+        <section class="panel notice-hero" id="noticeTop">
+          <div class="notice-hero-head">
+            <div>
+              <p class="eyebrow warm">TODAY NOTICE</p>
+              <h2>오늘 확인할 업무</h2>
+              <p id="noticeTopDate">오늘 날짜에 맞춰 표시됩니다.</p>
+            </div>
+            <div class="notice-hero-actions">
+              <span class="notice-progress-badge" id="noticeProgressBadge">0 / 0</span>
+              <button class="soft-btn small" id="noticeSettingsBtn">요일 설정</button>
+            </div>
+          </div>
+          <div class="notice-list hero-notice-list" id="noticeList"></div>
+          <p class="empty-text" id="noticeEmpty">오늘 등록된 확인 업무가 없습니다. 요일 설정에서 추가하세요.</p>
+        </section>
+
         <section class="hero">
           <div>
             <p class="date-line" id="todayDate">0000년 00월 00일</p>
-            <h2>좋은 아침입니다! <span>☀</span></h2>
-            <p>오늘도 깔끔한 오픈 근무, 차근차근 시작해요.</p>
+            <h2>좋은 하루입니다! <span>☀</span></h2>
+            <p>오늘도 하나씩 확인하면서 깔끔하게 마무리해요.</p>
           </div>
           <div class="hero-actions">
+            <button class="soft-btn" id="shiftBtn">근무 시작</button>
             <button class="soft-btn" id="resetTodayBtn">오늘 체크 초기화</button>
             <button class="primary-btn" id="quickAddBtn">+ 업무 추가</button>
           </div>
         </section>
 
+        <section class="next-task-card" id="nextTaskCard" hidden>
+          <div><span class="next-label">NEXT TASK</span><strong id="nextTaskTitle">다음 업무</strong><p id="nextTaskDesc"></p></div>
+          <span class="time-chip" id="nextTaskTime"></span>
+        </section>
+
         <section class="stats-grid">
-          <article class="stat-card">
-            <div class="stat-icon green">✓</div>
-            <div><span>완료된 업무</span><strong><b id="doneCount">0</b> / <b id="totalCount">23</b></strong></div>
-          </article>
-          <article class="stat-card">
-            <div class="stat-icon blue">◷</div>
-            <div><span>진행률</span><strong id="progressText">0%</strong></div>
-          </article>
-          <article class="stat-card">
-            <div class="stat-icon orange">☷</div>
-            <div><span>남은 업무</span><strong id="remainCount">23</strong></div>
-          </article>
-          <article class="stat-card">
-            <div class="stat-icon purple">☀</div>
-            <div><span>오늘 확인</span><strong id="noticeCount">0</strong></div>
-          </article>
+          <article class="stat-card"><div class="stat-icon green">✓</div><div><span>완료된 업무</span><strong><b id="doneCount">0</b> / <b id="totalCount">23</b></strong></div></article>
+          <article class="stat-card"><div class="stat-icon blue">◷</div><div><span>진행률</span><strong id="progressText">0%</strong></div></article>
+          <article class="stat-card"><div class="stat-icon orange">★</div><div><span>남은 필수 업무</span><strong id="requiredRemainCount">0</strong></div></article>
+          <article class="stat-card"><div class="stat-icon purple">📷</div><div><span>남은 사진 업무</span><strong id="photoRemainCount">0</strong></div></article>
         </section>
 
         <section class="dashboard-grid">
           <article class="panel checklist-panel" id="checklist">
             <div class="panel-head">
-              <div>
-                <p class="eyebrow">OPEN WORK LIST</p>
-                <h3>오픈 근무 업무 리스트</h3>
-              </div>
-              <div class="panel-tools">
-                <span class="count-badge" id="listBadge">총 23개</span>
-                <button class="icon-circle" id="searchToggle" aria-label="검색">⌕</button>
-              </div>
+              <div><p class="eyebrow">WORK LIST</p><h3>오늘 업무 리스트</h3></div>
+              <div class="panel-tools"><span class="count-badge" id="listBadge">총 23개</span><button class="icon-circle" id="searchToggle" aria-label="검색">⌕</button></div>
             </div>
-
             <div class="progress-track"><i id="progressBar"></i></div>
-
-            <div class="search-row" id="searchRow" hidden>
-              <input id="searchInput" type="search" placeholder="업무 검색" />
-              <button class="soft-btn" id="searchClear">지우기</button>
+            <div class="filter-row">
+              <button class="filter-btn active" data-filter="all">전체</button>
+              <button class="filter-btn" data-filter="pending">미완료</button>
+              <button class="filter-btn" data-filter="required">필수 ★</button>
+              <button class="filter-btn" data-filter="photo">사진 📷</button>
+              <button class="filter-btn" data-filter="timed">시간 ⏰</button>
             </div>
-
+            <div class="search-row" id="searchRow" hidden><input id="searchInput" type="search" placeholder="업무 검색" /><button class="soft-btn" id="searchClear">지우기</button></div>
             <div class="task-list" id="taskList"></div>
-
-            <div class="add-row">
-              <input id="newTaskInput" type="text" maxlength="140" placeholder="새 업무를 추가하세요" />
-              <button class="primary-btn" id="addTaskBtn">추가</button>
-            </div>
+            <div class="add-row"><input id="newTaskInput" type="text" maxlength="140" placeholder="새 업무를 추가하세요" /><button class="primary-btn" id="addTaskBtn">추가</button></div>
           </article>
 
           <div class="right-column">
-            <article class="panel" id="schedule">
-              <div class="panel-head">
-                <div>
-                  <p class="eyebrow">TODAY NOTICE</p>
-                  <h3>오늘 확인할 업무</h3>
-                </div>
-                <button class="soft-btn small" id="noticeSettingsBtn">설정</button>
-              </div>
-              <div class="notice-list" id="noticeList"></div>
-              <p class="empty-text" id="noticeEmpty">오늘 등록된 확인 업무가 없습니다.</p>
-            </article>
-
             <article class="panel" id="memo">
-              <div class="panel-head">
-                <div>
-                  <p class="eyebrow">MEMO</p>
-                  <h3>오늘 메모</h3>
-                </div>
-                <span class="save-label" id="memoSaveLabel">자동 저장</span>
-              </div>
+              <div class="panel-head"><div><p class="eyebrow">MEMO</p><h3>오늘 메모</h3></div><span class="save-label" id="memoSaveLabel">자동 저장</span></div>
               <textarea id="memoInput" maxlength="500" placeholder="특이사항, 전달사항, 다음 근무자에게 남길 메모를 적어두세요."></textarea>
-              <div class="memo-bottom">
-                <span id="memoCount">0 / 500</span>
-                <button class="text-btn" id="memoClearBtn">비우기</button>
-              </div>
+              <div class="memo-bottom"><span id="memoCount">0 / 500</span><button class="text-btn" id="memoClearBtn">비우기</button></div>
             </article>
 
-            <article class="panel schedule-card">
-              <div class="panel-head">
-                <div>
-                  <p class="eyebrow">TIME GUIDE</p>
-                  <h3>주요 시간 업무</h3>
-                </div>
-              </div>
-              <div class="time-list">
-                <div><span>20:30</span><p>포스 한쪽 마감</p></div>
-                <div><span>21:00</span><p>폐기 대상 정리 및 재고실사</p></div>
-                <div><span>21:30</span><p>포스 폐기 처리 및 사진 확인</p></div>
-                <div><span>22:00</span><p>포스 종료</p></div>
-              </div>
+            <article class="panel">
+              <div class="panel-head"><div><p class="eyebrow">PHOTO CHECK</p><h3>사진 확인</h3></div><span class="count-badge" id="photoCheckBadge">0개 남음</span></div>
+              <div class="compact-list" id="photoCheckList"></div>
             </article>
+
+            <article class="panel">
+              <div class="panel-head"><div><p class="eyebrow">TIME GUIDE</p><h3>주요 시간 업무</h3></div></div>
+              <div class="time-list" id="timeGuideList"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel final-check-card" id="finalCheckCard">
+          <div class="panel-head"><div><p class="eyebrow warm">FINAL CHECK</p><h3>퇴근 전 최종 확인</h3></div><span class="count-badge" id="finalCheckBadge">0 / 5</span></div>
+          <div class="final-check-grid" id="finalCheckList"></div>
+        </section>
+
+        <section class="panel summary-card" id="summaryCard">
+          <div class="panel-head"><div><p class="eyebrow">SHIFT SUMMARY</p><h3>오늘 근무 요약</h3></div><span class="count-badge" id="shiftStatusBadge">근무 전</span></div>
+          <div class="summary-grid">
+            <div><span>시작</span><strong id="shiftStartText">-</strong></div>
+            <div><span>종료</span><strong id="shiftEndText">-</strong></div>
+            <div><span>완료</span><strong id="summaryDone">0 / 23</strong></div>
+            <div><span>소요 시간</span><strong id="shiftDuration">-</strong></div>
+          </div>
+          <div class="summary-warning" id="summaryWarning">아직 완료하지 않은 업무가 있습니다.</div>
+        </section>
+
+        <section class="panel utility-card">
+          <div class="panel-head"><div><p class="eyebrow">BACKUP</p><h3>백업 / 복원</h3></div></div>
+          <p class="utility-desc">체크리스트, 요일 설정, 메모와 기록을 JSON 파일로 보관할 수 있습니다.</p>
+          <div class="utility-actions">
+            <button class="soft-btn" id="exportBtn">백업 파일 저장</button>
+            <label class="soft-btn file-label">백업 불러오기<input type="file" id="importInput" accept="application/json,.json" hidden></label>
           </div>
         </section>
       </main>
 
-      <footer>
-        <span>Open Shift Manager</span>
-        <span>saved locally · responsive web app</span>
-      </footer>
+      <footer><span>Open Shift Manager</span><span>saved locally · responsive web app · v2</span></footer>
     </div>
   </div>
 
   <nav class="mobile-bottom-nav">
     <button data-scroll="home" class="active"><span>⌂</span><b>홈</b></button>
+    <button data-scroll="noticeTop"><span>☀</span><b>오늘</b></button>
     <button data-scroll="checklist"><span>☑</span><b>체크</b></button>
-    <button data-scroll="schedule"><span>☀</span><b>오늘</b></button>
     <button data-scroll="memo"><span>✎</span><b>메모</b></button>
   </nav>
 
@@ -173,42 +157,34 @@
 
   <div class="modal-wrap" id="settingsModal" hidden>
     <div class="modal">
-      <div class="modal-head">
-        <div>
-          <p class="eyebrow">NOTICE SETTINGS</p>
-          <h3>오늘 확인 업무 설정</h3>
-        </div>
-        <button class="icon-circle" id="closeSettings">×</button>
-      </div>
-
+      <div class="modal-head"><div><p class="eyebrow">NOTICE SETTINGS</p><h3>오늘 확인 업무 설정</h3></div><button class="icon-circle" id="closeSettings">×</button></div>
       <div class="weekday-tabs" id="weekdayTabs">
-        <button data-day="1">월</button>
-        <button data-day="2">화</button>
-        <button data-day="3">수</button>
-        <button data-day="4">목</button>
-        <button data-day="5">금</button>
-        <button data-day="6">토</button>
-        <button data-day="0">일</button>
+        <button data-day="1">월</button><button data-day="2">화</button><button data-day="3">수</button><button data-day="4">목</button><button data-day="5">금</button><button data-day="6">토</button><button data-day="0">일</button>
       </div>
-
-      <div class="settings-title-row">
-        <strong id="settingsDayTitle">월요일</strong>
-        <span id="settingsDayCount">0개</span>
-      </div>
-
+      <div class="settings-title-row"><strong id="settingsDayTitle">월요일</strong><span id="settingsDayCount">0개</span></div>
       <div class="settings-list" id="settingsList"></div>
-
-      <div class="add-row settings-add">
-        <input id="noticeInput" type="text" maxlength="140" placeholder="이 요일에 반복할 업무" />
-        <button class="primary-btn" id="addNoticeBtn">추가</button>
-      </div>
-
-      <div class="modal-note">
-        이 설정은 브라우저에 저장되며 새로고침해도 유지됩니다.
-      </div>
+      <div class="add-row settings-add"><input id="noticeInput" type="text" maxlength="140" placeholder="이 요일에 반복할 업무" /><button class="primary-btn" id="addNoticeBtn">추가</button></div>
+      <div class="modal-note">요일별 설정은 브라우저에 계속 저장되며 오늘 체크 초기화로 삭제되지 않습니다.</div>
     </div>
   </div>
 
+  <div class="modal-wrap" id="taskModal" hidden>
+    <div class="modal task-modal">
+      <div class="modal-head"><div><p class="eyebrow">TASK DETAIL</p><h3>업무 설정</h3></div><button class="icon-circle" id="closeTaskModal">×</button></div>
+      <input type="hidden" id="taskEditId">
+      <label class="form-label">업무 내용<input class="form-input" id="taskEditText" maxlength="140"></label>
+      <label class="form-label">업무 메모<textarea class="form-textarea" id="taskEditMemo" maxlength="300" placeholder="주의사항이나 상세 설명"></textarea></label>
+      <label class="form-label">시간<input class="form-input" id="taskEditTime" type="time"></label>
+      <div class="switch-grid">
+        <label><input type="checkbox" id="taskEditRequired"><span>★ 필수 업무</span></label>
+        <label><input type="checkbox" id="taskEditPhoto"><span>📷 사진 필요</span></label>
+        <label><input type="checkbox" id="taskEditTodayHidden"><span>오늘만 제외</span></label>
+      </div>
+      <div class="dialog-actions"><button class="soft-btn" id="taskModalCancel">취소</button><button class="primary-btn" id="taskModalSave">저장</button></div>
+    </div>
+  </div>
+
+  <div class="toast-wrap" id="toastWrap" aria-live="polite"></div>
   <script src="script.js"></script>
 </body>
 </html>
